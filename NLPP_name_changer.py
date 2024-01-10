@@ -2,7 +2,6 @@ import os,sys
 from struct import unpack, pack
 
 root=os.getcwd()
-data_path=root+"/00000001/"
 
 def name_unpack(file):
     file_path=data_path+file
@@ -71,8 +70,19 @@ def name_pack(file):
     new_file.write(data)
     new_file.close()
 
-    return("修改成功")
-
+def find_file():
+    file_list=os.listdir(root)
+    for file in file_list:
+        if file=="00000001":
+            return(file)
+            break
+        try:
+            file.index("-")
+            return(file)
+            break
+        except:
+            continue
+        
 def main_():
     苗字1,名前1=name_unpack("savedata8")
     苗字2,名前2=name_unpack("savedata33")
@@ -89,10 +99,15 @@ def main_():
                 print("输入信息错误，请重试")
                 sys.exit()
     print("请输入你要修改的名字：（姓 名，中间使用空格隔开，姓和名的长度均不得超过12字节）")
-    print(name_pack("savedata"+str((int(num)-1)*25+8)))
+    try:
+        name_pack("savedata"+str((int(num)-1)*25+8))
+        print("修改成功")
+    except:
+        print("修改失败，请检查你输入的字符")
 
+data_path=root+"/"+find_file()+"/"
 main_()
-print("按任意键退出")
+print("按回车键退出")
 input()
     
     

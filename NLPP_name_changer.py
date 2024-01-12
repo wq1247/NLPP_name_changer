@@ -38,20 +38,20 @@ def name_pack(file):
             clib.index(w)
         except:
             print("你所使用的字符“"+w+"”不在字库中，请修改后重试")
-            sys.exit()
+            enter_exit()
     for w in 名前:
         try:
             clib.index(w)
         except:
             print("你所使用的字符“"+w+"”不在字库中，请修改后重试")
-            sys.exit()
+            enter_exit()
     苗字b,名前b=苗字.encode('utf-8'),名前.encode('utf-8')
     if len(苗字b) > 12:
         print("姓超长，请重试")
-        sys.exit()
+        enter_exit()
     if len(名前b) > 12:
         print("名超长，请重试")
-        sys.exit()
+        enter_exit()
     while len(苗字b) < 12:
         苗字b+=pack("B",0)
     while len(名前b) < 12:
@@ -76,6 +76,9 @@ def find_file():
         if file=="00000001":
             return(file)
             break
+        elif file=="00000f4e":
+            return(file)
+            break
         try:
             file.index("-")
             return(file)
@@ -83,31 +86,48 @@ def find_file():
         except:
             continue
         
+def enter_exit():
+    print("按回车键退出")
+    input()
+    sys.exit()
+
 def main_():
-    苗字1,名前1=name_unpack("savedata8")
-    苗字2,名前2=name_unpack("savedata33")
-    苗字3,名前3=name_unpack("savedata58")
     print("你现有的存档名称分别为：")
-    print("存档1：",苗字1,名前1)
-    print("存档2：",苗字2,名前2)
-    print("存档3：",苗字3,名前3)
+    try:
+        苗字1,名前1=name_unpack("savedata8")
+        print("存档1：",苗字1,名前1)
+    except:
+        print("存档1为空")
+    try:
+        苗字2,名前2=name_unpack("savedata33")
+        print("存档2：",苗字2,名前2)
+    except:
+        print("存档2为空")
+    try:
+        苗字3,名前3=name_unpack("savedata58")
+        print("存档3：",苗字3,名前3)
+    except:
+        print("存档3为空")
     print("请输入你想修改的存档编号：(1/2/3)")
     num=input()
     if num != "1":
         if num != "2":
             if num !="3":
                 print("输入信息错误，请重试")
-                sys.exit()
+                enter_exit()
     print("请输入你要修改的名字：（姓 名，中间使用空格隔开，姓和名的长度均不得超过12字节）")
     try:
         name_pack("savedata"+str((int(num)-1)*25+8))
         print("修改成功")
     except:
-        print("修改失败，请检查你输入的字符")
+        sys.exit()
 
-data_path=root+"/"+find_file()+"/"
+try:
+    data_path=root+"/"+find_file()+"/"
+except:
+    print("未识别到存档文件")
+    enter_exit()
 main_()
-print("按回车键退出")
-input()
+enter_exit()
     
     
